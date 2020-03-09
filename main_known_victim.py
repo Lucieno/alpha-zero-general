@@ -31,7 +31,7 @@ if __name__ == "__main__":
 
     victim_net.load_checkpoint(args.victim_file[0], args.victim_file[1])
 
-    c = CoachKnownVictim(g, nnet, args)
+    c = CoachKnownVictim(g, nnet, victim_net, args)
     if args.load_model:
         print("Load trainExamples from file")
         c.loadTrainExamples()

@@ -1,7 +1,7 @@
 from collections import deque
 from Arena import Arena
 from MCTS import MCTS
-from MctsKnownVictim import mcts_known_victim
+from mcts_known_victim import MctsKnownVictim
 import numpy as np
 from pytorch_classification.utils import Bar, AverageMeter
 import time, os, sys
