@@ -7,12 +7,10 @@ class MctsKnownVictim():
     This class handles the MCTS tree.
     """
 
-    def __init__(self, game, nnet, victim_mcts, adversary_id, args):
+    def __init__(self, game, nnet, victim_mcts, args):
         self.game = game
         self.nnet = nnet
         self.victim_mcts = victim_mcts
-        self.adversary_id = adversary_id
-        assert self.adversary_id == -1 or self.adversary_id == 1
         self.args = args
         self.Qsa = {}       # stores Q values for s,a (as defined in the paper)
         self.Nsa = {}       # stores #times edge s,a was visited
@@ -32,7 +30,7 @@ class MctsKnownVictim():
                    proportional to Nsa[(s,a)]**(1./temp)
         """
         for i in range(self.args.numMCTSSims):
-            self.search(canonicalBoard, adversary_id)
+            self.search(canonicalBoard)
 
         s = self.game.stringRepresentation(canonicalBoard)
         counts = [self.Nsa[(s,a)] if (s,a) in self.Nsa else 0 for a in range(self.game.getActionSize())]
@@ -53,10 +51,10 @@ class MctsKnownVictim():
         next_s, next_player = self.game.getNextState(canonicalBoard, 1, a)
         next_s = self.game.getCanonicalForm(next_s, next_player)
 
-        v = self.search(next_s, adversary_id)
+        v = self.search(next_s)
         return -v
 
-    def search(self, canonicalBoard, player_id):
+    def search(self, canonicalBoard, is_adversary=True):
         """
         This function performs one iteration of MCTS. It is recursively called
         till a leaf node is found. The action chosen at each node is one that
@@ -84,7 +82,7 @@ class MctsKnownVictim():
             # terminal node
             return -self.Es[s]
 
-        if player_id != self.adversary_id:
+        if is_adversary is False:
             return self.victim_search(canonicalBoard)
 
         if s not in self.Ps:
@@ -128,7 +126,7 @@ class MctsKnownVictim():
         next_s, next_player = self.game.getNextState(canonicalBoard, 1, a)
         next_s = self.game.getCanonicalForm(next_s, next_player)
 
-        v = self.search(next_s, -adversary_id) # victim_id
+        v = self.search(next_s, is_adversary=False)
 
         if (s,a) in self.Qsa:
             self.Qsa[(s,a)] = (self.Nsa[(s,a)]*self.Qsa[(s,a)] + v)/(self.Nsa[(s,a)]+1)
