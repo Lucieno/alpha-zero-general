@@ -46,7 +46,7 @@ class MCTS():
         return probs
 
 
-    def search(self, canonicalBoard):
+    def search(self, canonicalBoard, is_return_action=False):
         """
         This function performs one iteration of MCTS. It is recursively called
         till a leaf node is found. The action chosen at each node is one that
@@ -72,7 +72,10 @@ class MCTS():
             self.Es[s] = self.game.getGameEnded(canonicalBoard, 1)
         if self.Es[s]!=0:
             # terminal node
-            return -self.Es[s]
+            if is_return_action:
+                return -self.Es[s], 'end'
+            else:
+                return -self.Es[s]
 
         if s not in self.Ps:
             # leaf node
@@ -93,7 +96,10 @@ class MCTS():
 
             self.Vs[s] = valids
             self.Ns[s] = 0
-            return -v
+            if is_return_action:
+                return -v, 'first'
+            else:
+                return -v
 
         valids = self.Vs[s]
         cur_best = -float('inf')
@@ -126,4 +132,7 @@ class MCTS():
             self.Nsa[(s,a)] = 1
 
         self.Ns[s] += 1
-        return -v
+        if is_return_action:
+            return -v, a
+        else:
+            return -v

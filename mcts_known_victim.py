@@ -50,12 +50,21 @@ class MctsKnownVictim():
         # a = np.argmax(self.victim_mcts.getActionProb(canonicalBoard, temp=0))
         # next_s, next_player = self.game.getNextState(canonicalBoard, 1, a)
         # next_s = self.game.getCanonicalForm(next_s, next_player)
-        v = self.victim_mcts.search(canonicalBoard)
-        return -v
+        victim_v, a = self.victim_mcts.search(canonicalBoard, is_return_action=True)
+        if a == 'end':
+            return -victim_v
+        elif a == 'first':
+            v = self.search(canonicalBoard)
+            return -v
+        else:
+            next_s, next_player = self.game.getNextState(canonicalBoard, 1, a)
+            next_s = self.game.getCanonicalForm(next_s, next_player)
+            v = self.search(canonicalBoard)
+            return v
 
     def search(self, canonicalBoard, is_adversary=True):
         """
-        This function performs one iteration of MCTS. It is recursively called
+       This function performs one iteration of MCTS. It is recursively called
         till a leaf node is found. The action chosen at each node is one that
         has the maximum upper confidence bound as in the paper.
 
