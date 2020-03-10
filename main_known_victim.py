@@ -14,8 +14,9 @@ args = dotdict({
     'cpuct': 1,
 
     'checkpoint': './temp/',
-    'load_model': False,
-    'load_folder_file': ('/dev/models/8x100x50','best.pth.tar'),
+    'load_model': True,
+    # 'load_folder_file': ('/dev/models/8x100x50','best.pth.tar'),
+    'load_folder_file': ('pretrained_models/othello/pytorch','6x6_153checkpoints_best.pth.tar'),
     'victim_file': ('pretrained_models/othello/pytorch','6x6_153checkpoints_best.pth.tar'),
     'numItersForTrainExamplesHistory': 20,
 
