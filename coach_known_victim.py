@@ -115,12 +115,12 @@ class CoachKnownVictim():
             # training new network, keeping a copy of the old one
             self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
             self.pnet.load_checkpoint(folder=self.args.checkpoint, filename='temp.pth.tar')
-            pmcts = KnownVictimMCTS(self.game, self.pnet, self.victim_net, self.args)
+            pmcts = MctsKnownVictim(self.game, self.pnet, self.victim_net, self.args)
 
             pitted_victim_mcts = MCTS(self.game, self.victim_net, self.args)
             
             self.nnet.train(trainExamples)
-            nmcts = KnownVictimMCTS(self.game, self.nnet, self.victim_net, self.args)
+            nmcts = MctsKnownVictim(self.game, self.nnet, self.victim_net, self.args)
 
             print('PITTING AGAINST VICTIM')
             arena = Arena(lambda x: np.argmax(pitted_victim_mcts.getActionProb(x, temp=0)),

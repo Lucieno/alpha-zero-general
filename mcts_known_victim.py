@@ -50,7 +50,7 @@ class MctsKnownVictim():
         # a = np.argmax(self.victim_mcts.getActionProb(canonicalBoard, temp=0))
         # next_s, next_player = self.game.getNextState(canonicalBoard, 1, a)
         # next_s = self.game.getCanonicalForm(next_s, next_player)
-        v = self.search(canonicalBoard)
+        v = self.victim_mcts.search(canonicalBoard)
         return -v
 
     def search(self, canonicalBoard, is_adversary=True):
